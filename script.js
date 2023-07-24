@@ -99,18 +99,67 @@ progress.addEventListener('mouseup',() => mousedown = false);
 fsBtn.addEventListener('click', fullScreen);
 
 function fullScreen() {
-    console.log('full screen..')
-    player.classList.toggle('playerFullscreen');
+    console.log('full screen..');
+    const tiltThreshold = 30; // Same threshold as used in handleOrientation
   
-    if (player.classList.contains('playerFullscreen')) {
-      // Check if the player is in fullscreen mode
-      // If so, add a CSS class to rotate the video 90 degrees clockwise
-      if (window.innerWidth <= 768) {
-        video.classList.add('rotateVideo');
+    // Check if the device orientation is within the tilt threshold
+    if (Math.abs(window.orientation) === 90 || Math.abs(window.orientation) === -90) {
+      player.classList.toggle('playerFullscreen');
+  
+      if (player.classList.contains('playerFullscreen')) {
+        // Check if the player is in fullscreen mode
+        // If so, add a CSS class to rotate the video 90 degrees clockwise
+        if (window.innerWidth <= 768) {
+          video.classList.add('rotateVideo');
+        }
+      } else {
+        // Remove the rotation class when exiting fullscreen mode
+        video.classList.remove('rotateVideo');
+      }
+    }
+  }
+  
+
+// Function to handle device orientation change
+function handleOrientation(event) {
+    const tiltThreshold = 30; // Adjust the threshold as needed for the tilt sensitivity
+  
+    // Check if the device orientation exceeds the tilt threshold
+    if (Math.abs(event.beta) > tiltThreshold || Math.abs(event.gamma) > tiltThreshold) {
+      // Enter fullscreen mode when the tilt threshold is exceeded
+      if (!player.classList.contains('playerFullscreen')) {
+        fullScreen();
+      }
+    }
+  }
+  
+  // Add event listener for deviceorientation event
+  window.addEventListener('deviceorientation', handleOrientation);
+  
+  function toggleFullScreen() {
+    if (!document.fullscreenElement &&    // alternative standard method
+        !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+      // Enter fullscreen mode if not already in fullscreen
+      if (player.requestFullscreen) {
+        player.requestFullscreen();
+      } else if (player.mozRequestFullScreen) { /* Firefox */
+        player.mozRequestFullScreen();
+      } else if (player.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+        player.webkitRequestFullscreen();
+      } else if (player.msRequestFullscreen) { /* IE/Edge */
+        player.msRequestFullscreen();
       }
     } else {
-      // Remove the rotation class when exiting fullscreen mode
-      video.classList.remove('rotateVideo');
+      // Exit fullscreen mode
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) { /* Firefox */
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { /* IE/Edge */
+        document.msExitFullscreen();
+      }
     }
   }
   

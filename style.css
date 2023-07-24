@@ -201,22 +201,4 @@ html {
     max-width: none;
     width: 100%;
   }
-
-  @media (max-width: 768px) {
-    /* Apply styles only on mobile devices with a max-width of 768px */
-    .rotate_mobile {
-      display: none; /* Hide the rotate button by default */
-    }
-  
-    .player.playerFullscreen .rotate_mobile {
-      display: block; /* Show the rotate button only when in fullscreen mode */
-    }
-  }
-  
-  /* Add the rotation class for the landscape orientation */
-  .rotateVideo {
-    transform: rotate(90deg);
-    transform-origin: center;
-  }
-  
   
