@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flip Text Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #outputBox {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            white-space: pre-wrap;
+            text-align: left;
+        }
+
+        #copyButton {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bold Text Generator</h1>
+        <textarea id="inputText" placeholder="Enter your text here..."></textarea>
+        <button onclick="boldText()">Make Bold</button>
+        <button onclick="undoBold()">Undo Bold</button>
+        <div id="outputBox">
+            <div id="outputText"></div>
+        </div>
+        <button id="copyButton" onclick="copyToClipboard()">Copy Text</button>
+    </div>
+
+    
+
+    <script>
+        let isBold = false;
+        let originalText = "";
+
+        function boldText() {
+            const inputText = document.getElementById("inputText").value;
+            const outputText = document.getElementById("outputText");
+
+            if (!inputText) {
+                outputText.textContent = "Please enter some text.";
+                return;
+            }
+
+            originalText = inputText;
+            const boldLines = inputText.split(/\r?\n/).map(line => `<div><strong>${line}</strong></div>`);
+            outputText.innerHTML = boldLines.join("");
+            isBold = true;
+        }
+
+        function undoBold() {
+            const outputText = document.getElementById("outputText");
+            if (!isBold || !originalText) {
+                outputText.textContent = "No bold text to undo.";
+                return;
+            }
+
+            const lines = originalText.split(/\r?\n/).map(line => `<div>${line}</div>`);
+            outputText.innerHTML = lines.join("");
+            originalText = "";
+            isBold = false;
+        }
+
+        function copyToClipboard() {
+            const outputText = document.getElementById("outputText");
+            if (!outputText.textContent) {
+                alert("There is no text to copy.");
+                return;
+            }
+
+            const textArea = document.createElement("textarea");
+            textArea.value = outputText.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+            alert("Text copied to clipboard!");
+        }
+    </script>
+</body>
+</html>
